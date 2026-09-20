@@ -8,6 +8,7 @@ on:
       - 'modules/**'
       - 'environments/**'
       - '.github/workflows/*.yml'
+
   workflow_dispatch:
     inputs:
       environment:
@@ -28,6 +29,7 @@ jobs:
   fmt:
     name: Terraform Format
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,13 +46,15 @@ jobs:
     name: Terraform Validate
     needs: fmt
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         environment: [dev, prod]
       fail-fast: false
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.environment == matrix.environment
+
     env:
       TF_IN_AUTOMATION: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,11 +76,12 @@ jobs:
     name: Terraform Security Scan
     needs: validate
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         environment: [dev, prod]
       fail-fast: false
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.environment == matrix.environment
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,15 +96,17 @@ jobs:
     name: Terraform Plan
     needs: [validate, security_scan]
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         environment: [dev, prod]
       fail-fast: false
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.environment == matrix.environment
+
     env:
       AWS_REGION: us-east-1
       AWS_DEFAULT_REGION: us-east-1
       TF_IN_AUTOMATION: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
