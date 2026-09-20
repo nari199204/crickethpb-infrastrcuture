@@ -8,6 +8,10 @@
 *.tfvars
 !*.tfvars.example
 
+
+!environments/dev/terraform.tfvars
+!environments/prod/terraform.tfvars
+
 # OS/editor noise
 .DS_Store
 .idea/
