@@ -129,8 +129,8 @@ jobs:
             -reconfigure \
             -backend-config="bucket=${{ vars.TERRAFORM_STATE_BUCKET || 'crickethub-us-east-1-terraform-state' }}" \
             -backend-config="key=${{ matrix.environment }}/terraform.tfstate" \
-            -backend-config="region=us-east-1" \
-            -backend-config="use_lockfile=true"
+            -backend-config="region=us-east-1" 
+  
 
       - name: Terraform plan
         working-directory: environments/${{ matrix.environment }}
