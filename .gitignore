@@ -1,0 +1,17 @@
+# Local Terraform state and caches
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.lock.hcl
+
+# Local overrides / secrets
+*.tfvars
+!*.tfvars.example
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log

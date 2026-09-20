@@ -1,0 +1,72 @@
+name: Terraform Apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to apply
+        required: true
+        type: choice
+        default: dev
+        options:
+          - dev
+          - prod
+      confirm:
+        description: Type APPLY to confirm deployment
+        required: true
+        default: CANCEL
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan_approval:
+    name: Plan approval gate
+    runs-on: ubuntu-latest
+    environment: plan-approval
+    steps:
+      - name: Await manual approval
+        run: echo "Manual approval received for Terraform plan before apply."
+
+  apply:
+    name: Terraform Apply
+    needs: plan_approval
+    if: ${{ github.event.inputs.confirm == 'APPLY' }}
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      AWS_DEFAULT_REGION: us-east-1
+      TF_IN_AUTOMATION: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Terraform init
+        working-directory: environments/${{ github.event.inputs.environment }}
+        run: |
+          terraform init \
+            -reconfigure \
+            -backend-config="bucket=${{ vars.TERRAFORM_STATE_BUCKET || 'crickethub-us-east-1-terraform-state' }}" \
+            -backend-config="key=${{ github.event.inputs.environment }}/terraform.tfstate" \
+            -backend-config="region=us-east-1" \
+            -backend-config="use_lockfile=true"
+
+      - name: Terraform plan
+        working-directory: environments/${{ github.event.inputs.environment }}
+        run: terraform plan -no-color -lock=false
+
+      - name: Terraform apply
+        working-directory: environments/${{ github.event.inputs.environment }}
+        run: terraform apply -auto-approve -input=false
