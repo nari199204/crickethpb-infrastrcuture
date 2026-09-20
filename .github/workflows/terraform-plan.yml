@@ -134,7 +134,7 @@ jobs:
 
       - name: Terraform plan
         working-directory: environments/${{ matrix.environment }}
-        run: terraform plan -no-color -lock=false  -input=false
+        run: terraform plan -no-color -lock=false  -input=false -out=tfplan
 
       - name: Upload plan artifact
         uses: actions/upload-artifact@v4
