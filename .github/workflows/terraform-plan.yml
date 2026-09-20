@@ -140,5 +140,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-${{ matrix.environment }}
-          path: environments/${{ matrix.environment }}/terraform.tfplan
-          if-no-files-found: ignore
+          path: environments/${{ matrix.environment }}/tfplan
+          if-no-files-found: error
