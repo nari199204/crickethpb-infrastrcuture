@@ -123,3 +123,9 @@ module "alb_controller" {
   oidc_provider_url = module.eks.oidc_provider_url
   tags              = var.common_tags
 }
+
+module "argocd" {
+  source = "../../modules/argocd"
+
+  namespace = "argocd"
+}
