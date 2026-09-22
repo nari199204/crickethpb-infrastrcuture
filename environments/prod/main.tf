@@ -77,6 +77,7 @@ module "eks" {
   cluster_security_group_ids = [module.security.cluster_security_group_id]
   node_groups = [{
     name            = "general"
+    ami_type        = "AL2023_x86_64_STANDARD"
     instance_types  = var.eks.instance_types
     min_size        = var.eks.min_size
     desired_size    = var.eks.desired_size
