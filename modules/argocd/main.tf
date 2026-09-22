@@ -29,6 +29,11 @@ resource "helm_release" "argocd" {
   }
 
   set {
+    name  = "configs.params.server\\.insecure"
+    value = "true"
+  }
+
+  set {
     name  = "server.metrics.enabled"
     value = "true"
   }
