@@ -92,6 +92,8 @@
         "elasticloadbalancing:ModifyListener",
         "elasticloadbalancing:AddListenerCertificates",
         "elasticloadbalancing:RemoveListenerCertificates",
+        "elasticloadbalancing:CreateRule",
+        "elasticloadbalancing:DeleteRule",
         "elasticloadbalancing:ModifyRule"
       ],
       "Resource": "*"
