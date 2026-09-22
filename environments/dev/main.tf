@@ -98,7 +98,7 @@ module "ecr" {
     "auth-service",
     "team-service",
     "match-service",
-    "scoring-service"
+    "scoring-service",
     "prediction-service"
   ]
   tags = var.common_tags
